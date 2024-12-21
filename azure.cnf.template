@@ -1,0 +1,12 @@
+[Tenant]
+id=tenant_id
+[Client]
+id=client_id
+[Redirect URI]
+base=base_url
+[Ports]
+start=0000
+end=9999
+[Scopes]
+1=User.Read
+2=Mail.Read

@@ -1,0 +1,135 @@
+All endpoints are prefixed with https://graph.microsoft.com/v1.0/
+
+1. User Information:
+
+    endpoints = {
+        "profile": "/me",
+        "photo": "/me/photo",
+        "manager": "/me/manager",
+        "direct_reports": "/me/directReports"
+    }
+
+2. Email & Calendar:
+
+    endpoints = {
+        "messages": "/me/messages",
+        "inbox": "/me/mailFolders/inbox/messages",
+        "sent_items": "/me/mailFolders/sentItems/messages",
+        "calendar": "/me/calendar",
+        "events": "/me/events",
+        "calendar_view": "/me/calendarView"
+    }
+
+
+3. OneDrive & Files:
+
+    endpoints = {
+        "my_files": "/me/drive/root/children",
+        "shared_files": "/me/drive/sharedWithMe",
+        "specific_folder": "/me/drive/root:/FolderName:/children"
+    }
+
+4. Teams:
+
+    endpoints = {
+        "my_teams": "/me/joinedTeams",
+        "channels": "/teams/{team-id}/channels",
+        "team_messages": "/teams/{team-id}/channels/{channel-id}/messages"
+    }
+
+5. Contacts:
+
+    endpoints = {
+        "contacts": "/me/contacts",
+        "contact_folders": "/me/contactFolders"
+    }
+
+6. Common Query Parameters:
+
+    params = {
+        "$select": "field1,field2",  # Choose specific fields
+        "$filter": "field eq 'value'",  # Filter results
+        "$orderby": "field desc",  # Sort results
+        "$top": 10,  # Limit results
+        "$skip": 10,  # Skip first 10 results
+        "$expand": "field",  # Include related entities
+        "$search": '"keywords"'  # Search in content
+    }
+
+7. Example using search in emails:
+
+    def search_emails(access_token, search_term):
+        graph_url = "https://graph.microsoft.com/v1.0/me/messages"
+    
+        headers = {
+            'Authorization': f'Bearer {access_token}',
+            'Content-Type': 'application/json'
+        }
+        
+        params = {
+            "$search": f'"{search_term}"',
+            "$top": 10,
+            "$select": "subject,receivedDateTime,from"
+        }
+    
+        response = requests.get(graph_url, headers=headers, params=params)
+        return response.json()
+
+Some tips:
+    - Use /beta instead of /v1.0 in the URL to access preview features
+    - Most endpoints support OData query parameters
+    - Some operations require different permission scopes
+    - Rate limits apply, so consider implementing pagination for large datasets
+
+
+Mail attachments:
+mail response will be metadata with attachments in the 'value' array
+{
+    "value": [
+        {
+            "id": "some-email-id",
+            "subject": "Test Email",
+            "attachments": [
+                {
+                    "id": "attachment-id-1",
+                    "name": "document.pdf",
+                    "contentType": "application/pdf",
+                    "size": 123456,
+                    "isInline": false
+                },
+                {
+                    "id": "attachment-id-2",
+                    "name": "image.jpg",
+                    "contentType": "image/jpeg",
+                    "size": 654321,
+                    "isInline": false
+                }
+            ]
+        }
+    ]
+}
+to get the attachment, use the attachment id and the endpoint:
+
+metadata:
+/me/messages/{message-id}/attachments/{attachment-id}/
+
+
+content:
+/me/messages/{message-id}/attachments/{attachment-id}/$value
+
+save_attachment(token, message_id, attachment_id, attachment_name):
+    graph_url = https://graph.microsoft.com/v1.0/me/messages/{message-id}/attachments/{attachment-id}/$value
+    attachment_url = https://graph.microsoft.com/v1.0/me/messages/{message-id}/attachments/{attachment-id}/$value
+
+    headers = {
+        'Authorization': f'Bearer {token}',
+        'Content-Type': 'application/json'
+    }
+
+    response = requests.get(attachment_url, headers=headers)
+
+    filename = f"{attachment_id}_{attachment_name}"
+    
+    with open(filename, 'wb') as f:
+        f.write(response.content)
+    
