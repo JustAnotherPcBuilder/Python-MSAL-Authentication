@@ -1,7 +1,7 @@
 <h1>Background</h1>    
 I was using pywin32 to read office365 work emails for one of my projects. 
 Unfortunately, this has several problems:<br/><br/>
-    1. Pywine can only interact with the full desktop Outlook app (office 365 download) NOT the Office apps installed in Windows by default.<br/>
+    1. Pywin32 can only interact with the full desktop Outlook app (office 365 download) NOT the Office apps installed in Windows by default.<br/>
     2. Outlook must store emails onto a local cache (limiting email search for very old emails).<br/>
     3. Pywin32 is an external library that must be downloaded for the script to work properly. (I prefer to keep things as built-in as possible)<br/>
 <br/>
