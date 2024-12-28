@@ -19,13 +19,14 @@ my organization.<br/>
 <h3>Azure Configuration</h3>
 Azure App Configuration is a process in and of itself, especially for new users. <br/>
 Here is a short diagram explaining the requirements for Graph API.
-![Alt text](./Azure config.svg)
+![Azure config](https://github.com/user-attachments/assets/06e7fefa-0fbf-4a65-9721-b8eb91ce72ec)
 
 
 <h3>Authentication Process</h3>
 After an app is registered with Azure (or Entra), you can write code to interact with the API.<br/>
 Before you can use the API, you require a token. The process for retrieving the token with MSAL is shown below:
-![Alt text](./Authentication Process.svg)
+![Authentication Process](https://github.com/user-attachments/assets/80c3c5a4-277a-4cb7-96d0-cd907a638305)
+
 Tokens are then used in headers for requests on different endpoints to retrieve data.
 
 
